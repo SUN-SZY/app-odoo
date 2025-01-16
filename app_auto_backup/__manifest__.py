@@ -5,12 +5,22 @@
 #    'website': "https://www.odooai.cn",
 
 {
-    'name': "Database auto backup and Download,数据库自动备份",
-    'version': '16.24.10.09',
-
-    'summary': 'Automated and odoo database backups. easy download and manage database file. optimized from auto_backup of oca Yenthe Van Ginneken',
-
-    'description': """
+    'name': "Database auto backup,database restore Download manager,数据库自动备份",
+    'version': '16.0.25.01.16',
+    'author': 'odooai.cn',
+    'category': 'Extra tools',
+    'website': 'https://www.odooai.cn',
+    'live_test_url': 'https://demo.odooapp.cn',
+    'license': 'OPL-1',
+    'sequence': 20,
+    'price': 38.00,
+    'currency': 'EUR',
+    'images': ['static/description/banner.png'],
+    'summary': '''
+    Automated odoo db backups.odoo db restore. Odoo data easy download and manage database file.
+    optimized from auto_backup of oca
+    ''',
+    'description': '''
     1. Easy schedule database backup
     2. Set remote backup and cron schedule
     3. Manual backup database in one click
@@ -30,16 +40,7 @@
         2) Search the action 'Backup scheduler'.
         3) Set it active and choose how often you wish to take backups.
         4) If you want to write backups to a remote location you should fill in the SFTP details.
-    """,
-
-    'author': 'odooai.cn',
-    'website': "http://www.odooai.cn",
-    'category': 'Extra tools',
-    'installable': True,
-    'license': 'LGPL-3',
-    'price': 38.00,
-    'currency': 'EUR',
-
+    ''',
     # any module necessary for this one to work correctly
     'depends': [
         'base',
@@ -57,4 +58,7 @@
         'data/backup_data.xml',
         'views/db_backup_details.xml',
     ],
+    'installable': True,
+    'application': True,
+    'auto_install': False,
 }
