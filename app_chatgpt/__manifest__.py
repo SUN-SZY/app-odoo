@@ -10,7 +10,7 @@
 
 {
     'name': 'ChatGPT4, China Ali,AiGC Center.Ai服务中心，聚合全网Ai',
-    'version': '16.24.07.29',
+    'version': '16.0.25.02.07',
     'author': 'odooai.cn',
     'company': 'odooai.cn',
     'maintainer': 'odooai.cn',
@@ -48,11 +48,8 @@
     pip3 install typing-extensions==4.12.2
     ''',
     'depends': [
-        'base',
         'app_odoo_customize',
-        'base_setup',
         'mail',
-        'queue_job',
     ],
     'data': [
         'security/ir.model.access.csv',

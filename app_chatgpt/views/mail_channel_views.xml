@@ -27,10 +27,13 @@
                         <group>
                             <group name="role_set" string="Ai Parameter">
                                 <field name="channel_type" readonly="1"/>
-                                <field name="ai_partner_id"
+                                <field name="ai_partner_id" widget="many2one_avatar"
                                        options="{'no_open': True, 'no_create': True}"/>
-                                <field name="ext_ai_partner_id"
+                                <field name="ext_ai_partner_id" widget="many2one_avatar"
                                        options="{'no_open': True, 'no_create': True}"/>
+                                <field name="is_ai_conversation" widget="boolean_toggle" groups="base.group_no_one"/>
+                                <field name="ai_sys_content" attrs="{'invisible':[('is_ai_conversation','!=',True)]}" groups="base.group_no_one"/>
+                                <field name="ext_ai_sys_content" attrs="{'invisible':[('is_ai_conversation','!=',True)]}" groups="base.group_no_one"/>
                             </group>
                             <group  name="param_set" string="Ai Character Set">
                                 <div class="o_td_label">
@@ -88,11 +91,19 @@
             <field name="arch" type="xml">
                 <xpath expr="//kanban//field[1]" position="before">
                     <field name="is_private"/>
+                    <field name="ai_partner_id"/>
+                    <field name="ext_ai_partner_id"/>
+                    <field name="is_ai_conversation"/>
                 </xpath>
                 <xpath expr="//field[@name='description']" position="before">
                     <em>角色:</em>
                 </xpath>
                 <xpath expr="//button[@name='channel_join']" position="replace">
+                    <div class="row">
+                        <field name="ai_partner_id" widget="many2one_avatar" class="ml4 mr8"
+                               options="{'no_open': True, 'no_create': True}"/>
+                        <field name="is_ai_conversation" widget="boolean_toggle"/>
+                    </div>
                     <button attrs="{'invisible':[('is_private','=',True), ('group_ids', '!=', [])]}"
                             class="btn btn-warning float-end" type="edit">
                         智能设定

@@ -26,12 +26,12 @@
 
 {
     'name': 'odooapp.cn SaaS Client-Ai Passport.Odoo中文应用商店SaaS云服务客户端',
-    'version': '16.0.25.01.26',
+    'version': '16.0.25.02.07',
     'author': 'odooai.cn',
     'category': 'Base',
     'website': 'https://www.odooai.cn',
     'live_test_url': 'https://demo.odooapp.cn',
-    'license': 'OPL-1',
+    'license': 'LGPL-3',
     'sequence': 2,
     'price': 0.00,
     'currency': 'EUR',

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data noupdate="1">
-        <record model="mail.channel" id="channel_chatgpt">
+        <record id="channel_chatgpt" model="mail.channel">
             <field name="name">ChatGPT Group Chat</field>
             <field name="description">ChatGPT话题</field>
             <field name="image_128" type="base64" file="app_chatgpt/static/description/chatgpt.png"/>
         </record>
 
-        <record model="mail.message" id="module_install_notification">
+        <record id="module_install_notification" model="mail.message">
             <field name="model">mail.channel</field>
             <field name="res_id" ref="app_chatgpt.channel_chatgpt"/>
             <field name="message_type">email</field>
@@ -17,6 +17,13 @@
             <p>Please ask me any question.</p>]]></field>
         </record>
 
+        <record id="channel_chatgpt" model="mail.channel">
+            <field name="name">Ai Conversation Group</field>
+            <field name="description">Ai互怼/辩论/二人转</field>
+            <field name="image_128" type="base64" file="app_chatgpt/static/img/icon_odooai.png"/>
+            <field name="image_128" type="base64" file="app_chatgpt/static/img/icon_odooai.png"/>
+        </record>
+
 <!--        <record model="mail.channel.member" id="channel_member_chatgtp_channel_for_admin">-->
 <!--            <field name="partner_id" ref="base.partner_admin"/>-->
 <!--            <field name="channel_id" ref="app_chatgpt.channel_chatgpt"/>-->
@@ -24,7 +31,7 @@
 <!--            <field name="seen_message_id" ref="app_chatgpt.module_install_notification"/>-->
 <!--        </record>-->
 
-        <record model="mail.channel" id="app_chatgpt.channel_chatgpt">
+        <record id="app_chatgpt.channel_chatgpt" model="mail.channel">
             <field name="group_ids" eval="[Command.link(ref('base.group_user'))]"/>
         </record>
     </data>

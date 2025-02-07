@@ -80,6 +80,17 @@ class Channel(models.Model):
     presence_penalty = fields.Float('避免重复词值', default=1, help="-2~2，值越大越少重复词")
 
     is_current_channel = fields.Boolean('是否当前用户默认频道', compute='_compute_is_current_channel', help='是否当前用户默认微信对话频道')
+    
+    # begin 处理Ai对话
+    is_ai_conversation = fields.Boolean('Ai Conversation', default=False,
+                                        help='Set active to make conversation between 2+ Ai Employee. You Just say first word, then Ai robots Auto Chat.')
+    # 主Ai角色设定
+    ai_sys_content = fields.Char('Main Robot Role', change_default=True,
+                                 help='The Role the First Ai robot play for. This is for Ai Conversation.')
+    # 辅助Ai角色设定
+    ext_ai_sys_content = fields.Char('Extend Robot Role', change_default=True,
+                                     help='The Role the Second Ai robot play for. This is for Ai Conversation.')
+    # end 处理Ai对话
 
     def name_get(self):
         result = []
@@ -318,7 +329,10 @@ class Channel(models.Model):
                 if sync_config == 'sync':
                     self.get_ai_response(ai, messages, channel, user_id, message)
                 else:
-                    self.with_delay().get_ai_response(ai, messages, channel, user_id, message)
+                    if hasattr(self, 'with_delay'):
+                        self.with_delay().get_ai_response(ai, messages, channel, user_id, message)
+                    else:
+                        self.get_ai_response(ai, messages, channel, user_id, message)
             except Exception as e:
                 raise UserError(_(e))
 
@@ -358,3 +372,10 @@ class Channel(models.Model):
     def _onchange_ai_partner_id(self):
         if self.ai_partner_id and self.ai_partner_id.image_1920:
             self.image_128 = self.ai_partner_id.avatar_128
+        if self.ai_partner_id and not self.ai_sys_content:
+            self.ai_sys_content = self.ai_partner_id.sys_content
+
+    @api.onchange('ext_ai_partner_id')
+    def _onchange_ext_ai_partner_id(self):
+        if self.ext_ai_partner_id and not self.ext_ai_sys_content:
+            self.ext_ai_sys_content = self.ext_ai_partner_id.sys_content
