@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 16.0+e-20231112\n"
+"Project-Id-Version: Odoo Server 16.0+e-20241226\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-23 08:20+0000\n"
-"PO-Revision-Date: 2024-07-23 08:20+0000\n"
+"POT-Creation-Date: 2025-02-12 11:14+0000\n"
+"PO-Revision-Date: 2025-02-12 11:14+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -150,6 +150,11 @@ msgid "Created on"
 msgstr "创建时间"
 
 #. module: app_auto_backup
+#: model:ir.model.fields.selection,name:app_auto_backup.selection__db_backup__backup_type__dump
+msgid "Data pg_dump (without filestore)"
+msgstr "仅数据备份(不含文件资源)"
+
+#. module: app_auto_backup
 #: model:ir.model.fields,field_description:app_auto_backup.field_db_backup__name
 msgid "Database"
 msgstr "数据库"
@@ -188,11 +193,6 @@ msgid "Download File"
 msgstr "下载文件"
 
 #. module: app_auto_backup
-#: model:ir.model.fields.selection,name:app_auto_backup.selection__db_backup__backup_type__dump
-msgid "Dump"
-msgstr ""
-
-#. module: app_auto_backup
 #: model:ir.model.fields,field_description:app_auto_backup.field_db_backup__email_to_notify
 msgid "E-mail to notify"
 msgstr "提醒E-mail地址"
@@ -208,6 +208,13 @@ msgstr "文件路径"
 #, python-format
 msgid "File Path or URL not found."
 msgstr "无法找到该文件路径或URL"
+
+#. module: app_auto_backup
+#. odoo-python
+#: code:addons/app_auto_backup/controllers/main.py:0
+#, python-format
+msgid "File not found for user."
+msgstr "没有找到合适此用户的文件。"
 
 #. module: app_auto_backup
 #: model:ir.model.fields,help:app_auto_backup.field_db_backup__email_to_notify
@@ -445,5 +452,10 @@ msgstr "SFtp备份至远程服务器："
 
 #. module: app_auto_backup
 #: model:ir.model.fields.selection,name:app_auto_backup.selection__db_backup__backup_type__zip
-msgid "Zip"
-msgstr "Zip压缩包"
+msgid "Zip Data and Filestore)"
+msgstr "Zip数据及文件"
+
+#. module: app_auto_backup
+#: model:ir.model.fields,help:app_auto_backup.field_db_backup__host
+msgid "please input the full url. like https://www.odooai.cn"
+msgstr "请输入能访问odoo的完整url。如 https://www.odooai.cn"

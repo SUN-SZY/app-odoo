@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import json
 import tempfile
+import zipfile
 
 from odoo import models, fields, api, tools, _
 from odoo.exceptions import Warning, AccessDenied
@@ -40,7 +41,8 @@ class DbBackup(models.Model):
                        default=_get_db_name)
     folder = fields.Char('Backup Directory', help='Absolute path for storing the backups', required=True,
                          default=lambda self: self._get_default_folder())
-    backup_type = fields.Selection([('zip', 'Zip'), ('dump', 'Dump')], 'Backup Type', required=True, default='zip')
+    backup_type = fields.Selection([('zip', 'Zip Data and Filestore)'), ('dump', 'Data pg_dump (without filestore)')],
+                                   string='Backup Type', required=True, default='dump')
     autoremove = fields.Boolean('Auto. Remove Backups',
                                 help='If you check this option you can choose to automaticly remove the backup '
                                      'after xx days')
@@ -137,9 +139,8 @@ class DbBackup(models.Model):
             bkp_file = '%s_%s.%s' % (time.strftime('%Y_%m_%d_%H_%M_%S'), rec.name, rec.backup_type)
             file_path = os.path.join(rec.folder, bkp_file)
             uri = rec.host
-            
             if uri.startswith('http') or uri.startswith('https'):
-                uri = rec.host
+                pass
             else:
                 uri = 'http://' + rec.host + ':' + rec.port
             bkp = ''
@@ -158,7 +159,7 @@ class DbBackup(models.Model):
             except Exception as error:
                 _logger.warning(
                     "Couldn't backup database %s. Bad database administrator password for server running at "
-                    "http://%s:%s" % (rec.name, uri, rec.port))
+                    "http://%s:%s  error: %s" % (rec.name, rec.host, rec.port, error))
                 _logger.warning("Exact error from the exception: %s", str(error))
                 continue
 
@@ -311,6 +312,7 @@ class DbBackup(models.Model):
         env = exec_pg_environ()
 
         if backup_format == 'zip':
+            # todo: 排除掉backup目录
             with tempfile.TemporaryDirectory() as dump_dir:
                 filestore = odoo.tools.config.filestore(db_name)
                 if os.path.exists(filestore):
@@ -322,20 +324,12 @@ class DbBackup(models.Model):
                 cmd.insert(-1, '--file=' + os.path.join(dump_dir, 'dump.sql'))
                 subprocess.run(cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT, check=True)
                 if stream:
-                    odoo.tools.osutil.zip_dir(dump_dir, stream, include_dir=False, fnct_sort=lambda file_name: file_name != 'dump.sql')
+                    self.zip_dir_pro(dump_dir, stream, include_dir=False, fnct_sort=lambda file_name: file_name != 'dump.sql')
                 else:
                     t=tempfile.TemporaryFile()
-                    odoo.tools.osutil.zip_dir(dump_dir, t, include_dir=False, fnct_sort=lambda file_name: file_name != 'dump.sql')
+                    self.zip_dir_pro(dump_dir, t, include_dir=False, fnct_sort=lambda file_name: file_name != 'dump.sql')
                     t.seek(0)
                     return t
-                # odoo.tools.exec_pg_command(*cmd)
-                # if stream:
-                #     odoo.tools.osutil.zip_dir(dump_dir, stream, include_dir=False, fnct_sort=lambda file_name: file_name != 'dump.sql')
-                # else:
-                #     t=tempfile.TemporaryFile()
-                #     odoo.tools.osutil.zip_dir(dump_dir, t, include_dir=False, fnct_sort=lambda file_name: file_name != 'dump.sql')
-                #     t.seek(0)
-                #     return t
         else:
             cmd.insert(-1, '--format=c')
             stdin, stdout = odoo.tools.exec_pg_command_pipe(*cmd)
@@ -377,3 +371,27 @@ class DbBackup(models.Model):
         if cron:
             cron.method_direct_trigger()
             return True
+    
+    def zip_dir_pro(self, path, stream, include_dir=True, fnct_sort=None):
+        """
+         增加的要排除的文件，主要是 xxxdump.zip，及整个目录
+        """
+        path = os.path.normpath(path)
+        len_prefix = len(os.path.dirname(path)) if include_dir else len(path)
+        if len_prefix:
+            len_prefix += 1
+        
+        with zipfile.ZipFile(stream, 'w', compression=zipfile.ZIP_DEFLATED, allowZip64=True) as zipf:
+            for dirpath, dirnames, filenames in os.walk(path):
+                filenames = sorted(filenames, key=fnct_sort)
+                for fname in filenames:
+                    if fname.find('dump.zip') != -1:
+                        continue
+                    if fname.find(self.folder) != -1:
+                        continue
+                    bname, ext = os.path.splitext(fname)
+                    ext = ext or bname
+                    if ext not in ['.pyc', '.pyo', '.swp', '.DS_Store']:
+                        path = os.path.normpath(os.path.join(dirpath, fname))
+                        if os.path.isfile(path):
+                            zipf.write(path, path[len_prefix:])
