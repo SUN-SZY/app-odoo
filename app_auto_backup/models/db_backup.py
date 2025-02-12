@@ -38,7 +38,7 @@ class DbBackup(models.Model):
     name = fields.Char('Database', required=True, help='Database you want to schedule backups for',
                        default=_get_db_name)
     folder = fields.Char('Backup Directory', help='Absolute path for storing the backups', required=True,
-                         default='/usr/lib/python3/dist-packages/odoo/backups')
+                         default=lambda self: self._get_default_folder())
     backup_type = fields.Selection([('zip', 'Zip'), ('dump', 'Dump')], 'Backup Type', required=True, default='zip')
     autoremove = fields.Boolean('Auto. Remove Backups',
                                 help='If you check this option you can choose to automaticly remove the backup '
@@ -77,6 +77,10 @@ class DbBackup(models.Model):
                                        'the FTP.')
     backup_details_ids = fields.One2many('db.backup.details', 'db_backup_id', 'Backup Details')
 
+    def _get_default_folder(self, folder=None):
+        if not folder:
+            folder = os.path.join(tools.config['data_dir'], 'backups')
+        return folder
     def test_sftp_connection(self, context=None):
         self.ensure_one()
 
