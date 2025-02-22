@@ -19,7 +19,7 @@
     'name': "App Pos order browse by store salesperson status",
     'version': '16.23.11.15',
     'author': 'odooai.cn',
-    'category': 'Point of Sale',
+    'category': 'Sales/Point of Sale',
     'website': 'https://www.odooai.cn',
     'live_test_url': 'https://demo.odooapp.cn',
     'license': 'LGPL-3',
