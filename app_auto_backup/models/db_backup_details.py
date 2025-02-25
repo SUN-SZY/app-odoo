@@ -14,7 +14,7 @@ class DbBackupDetails(models.Model):
     file_path = fields.Char(string="File Path")
     url = fields.Char(string='URL')
     db_backup_id = fields.Many2one('db.backup', 'Database Backup')
-    
+
     def action_download_file(self):
         self.ensure_one()
         if not self.file_path or not self.url:
@@ -25,7 +25,7 @@ class DbBackupDetails(models.Model):
                 'url': self.url,
                 'target': 'new',
             }
-            
+
     def unlink(self):
         for rec in self:
             try:

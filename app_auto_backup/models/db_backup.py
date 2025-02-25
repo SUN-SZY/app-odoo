@@ -148,12 +148,12 @@ class DbBackup(models.Model):
             try:
                 # try to backup database and write it away
                 fp = open(file_path, 'wb')
-                self._take_dump(rec.name, fp, 'db.backup', rec.backup_type)
+                rec._take_dump(rec.name, fp, 'db.backup', rec.backup_type)
                 fp.close()
                 rec.backup_details_ids.create({
                     'name': bkp_file,
                     'file_path': file_path,
-                    'url': '/dbbackup/download%s' % file_path,
+                    'url': '/dbbackup/download/%s' % file_path,
                     'db_backup_id': rec.id,
                 })
             except Exception as error:
@@ -371,7 +371,7 @@ class DbBackup(models.Model):
         if cron:
             cron.method_direct_trigger()
             return True
-    
+
     def zip_dir_pro(self, path, stream, include_dir=True, fnct_sort=None):
         """
          增加的要排除的文件，主要是 xxxdump.zip，及整个目录
@@ -380,7 +380,7 @@ class DbBackup(models.Model):
         len_prefix = len(os.path.dirname(path)) if include_dir else len(path)
         if len_prefix:
             len_prefix += 1
-        
+
         with zipfile.ZipFile(stream, 'w', compression=zipfile.ZIP_DEFLATED, allowZip64=True) as zipf:
             for dirpath, dirnames, filenames in os.walk(path):
                 filenames = sorted(filenames, key=fnct_sort)
