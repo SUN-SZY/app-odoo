@@ -452,7 +452,7 @@ msgstr "SFtp备份至远程服务器："
 
 #. module: app_auto_backup
 #: model:ir.model.fields.selection,name:app_auto_backup.selection__db_backup__backup_type__zip
-msgid "Zip Data and Filestore)"
+msgid "Zip Data and Filestore"
 msgstr "Zip数据及文件"
 
 #. module: app_auto_backup

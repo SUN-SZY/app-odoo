@@ -41,7 +41,7 @@ class DbBackup(models.Model):
                        default=_get_db_name)
     folder = fields.Char('Backup Directory', help='Absolute path for storing the backups', required=True,
                          default=lambda self: self._get_default_folder())
-    backup_type = fields.Selection([('zip', 'Zip Data and Filestore)'), ('dump', 'Data pg_dump (without filestore)')],
+    backup_type = fields.Selection([('zip', 'Zip Data and Filestore'), ('dump', 'Data pg_dump (without filestore)')],
                                    string='Backup Type', required=True, default='dump')
     autoremove = fields.Boolean('Auto. Remove Backups',
                                 help='If you check this option you can choose to automaticly remove the backup '
