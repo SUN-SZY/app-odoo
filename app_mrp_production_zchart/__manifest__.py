@@ -23,7 +23,7 @@
 
 {
     'name': 'MRP Production zChart Hierarchy, 多级BoM生产单多层级执行结构图,适用于多级BoM的生产工单,一棵树全览关联生产',
-    'version': '16.24.12.19',
+    'version': '16.0.25.02.27',
     'author': 'odooai.cn',
     'category': 'Base',
     'website': 'https://www.odooai.cn',

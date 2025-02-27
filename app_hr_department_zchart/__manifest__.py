@@ -23,7 +23,7 @@
 
 {
     'name': 'Hr Department zChart Hierarchy, 员工部门多层级结构图',
-    'version': '16.24.12.12',
+    'version': '16.0.25.02.27',
     'author': 'odooai.cn',
     'category': 'Human Resources',
     'website': 'https://www.odooai.cn',

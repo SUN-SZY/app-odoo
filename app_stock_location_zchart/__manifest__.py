@@ -23,7 +23,7 @@
 
 {
     'name': 'Stock Location Chart Hierarchy, 仓库库位多层级结构图',
-    'version': '16.24.04.01',
+    'version': '16.0.25.02.27',
     'author': 'odooai.cn',
     'category': 'Stock',
     'website': 'https://www.odooai.cn',
