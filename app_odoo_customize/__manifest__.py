@@ -23,7 +23,7 @@
 
 {
     'name': 'odoo Tweak OEM Development Enhance.Boost,Customize,Ai Employee,UI,Security,Remove Data All in One-优化提速51+项大全',
-    'version': '16.0.25.04.30',
+    'version': '16.0.25.06.12',
     'author': 'odooai.cn',
     'category': 'Extra Tools',
     'website': 'https://www.odooai.cn',
